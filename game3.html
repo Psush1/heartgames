@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Tap the Hearts</title>
+<style>
+  body {
+  margin:0;
+  background:#111;
+  touch-action: manipulation;
+  overflow: hidden;
+}
+  #field {
+    width:100vw; height:100vh;
+    position:relative;
+  }
+  .heart {
+    width:40px; height:40px;
+    background:red; border-radius:50%;
+    position:absolute;
+    cursor:pointer;
+  }
+</style>
+</head>
+<body>
+
+<div id="field"></div>
+
+<script>
+let field = document.getElementById("field");
+let score = 0;
+let time = 15;
+
+function spawnHeart(){
+  let h = document.createElement("div");
+  h.className = "heart";
+  h.style.left = Math.random() * (window.innerWidth - 40) + "px";
+  h.style.top = Math.random() * (window.innerHeight - 40) + "px";
+
+  h.onclick = () => {
+    score++;
+    h.remove();
+  };
+
+  field.appendChild(h);
+
+  setTimeout(() => h.remove(), 800);
+}
+
+let spawner = setInterval(spawnHeart, 500);
+
+let timer = setInterval(() => {
+  time--;
+  if (time <= 0) {
+    clearInterval(spawner);
+    clearInterval(timer);
+    alert("Score: " + score);
+  }
+}, 1000);
+</script>
+
+</body>
+</html>

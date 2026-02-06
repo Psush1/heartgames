@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Heart Dodger</title>
+<style>
+  body { margin:0; background:#000; overflow:hidden; }
+  #player {
+    position:absolute;
+    width:30px; height:30px;
+    background:pink;
+    top:50%; left:50%;
+  }
+  .enemy {
+    position:absolute;
+    width:30px; height:30px;
+    background:#444;
+  }
+</style>
+</head>
+<body>
+
+<div id="player"></div>
+
+<script>
+let p = document.getElementById("player");
+let px = window.innerWidth/2;
+let py = window.innerHeight/2;
+let alive = true;
+let time = 0;
+
+let enemies = [];
+
+document.addEventListener("mousemove", e => {
+  px = e.clientX;
+  py = e.clientY;
+});
+
+function spawnEnemy(){
+  let e = document.createElement("div");
+  e.className = "enemy";
+  e.x = Math.random()*window.innerWidth;
+  e.y = Math.random()*window.innerHeight;
+  document.body.appendChild(e);
+  enemies.push(e);
+}
+
+setInterval(spawnEnemy, 1500);
+
+setInterval(() => {
+  if (!alive) return;
+
+  p.style.left = px + "px";
+  p.style.top = py + "px";
+
+  enemies.forEach(e => {
+    e.x += (px - e.x) * 0.01;
+    e.y += (py - e.y) * 0.01;
+    e.style.left = e.x + "px";
+    e.style.top = e.y + "px";
+
+    if (Math.abs(px - e.x) < 20 && Math.abs(py - e.y) < 20) {
+      alive = false;
+      alert("Survived: " + time + " seconds");
+    }
+  });
+
+}, 20);
+
+setInterval(() => {
+  if (alive) time++;
+}, 1000);
+</script>
+
+</body>
+</html>

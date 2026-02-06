@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Catch the Hearts</title>
+<style>
+  body { margin:0; background:#111; overflow:hidden; }
+  #player {
+    position:absolute; bottom:10px; left:50%;
+    width:50px; height:50px;
+    background:pink; border-radius:50%;
+    transform:translateX(-50%);
+  }
+  .heart {
+    position:absolute; top:-40px;
+    width:30px; height:30px;
+    background:red; border-radius:50%;
+  }
+</style>
+</head>
+<body>
+
+<div id="player"></div>
+
+<script>
+let player = document.getElementById("player");
+let x = window.innerWidth / 2;
+let score = 0;
+let time = 10;
+
+document.addEventListener("mousemove", e => x = e.clientX);
+
+function spawnHeart(){
+  let h = document.createElement("div");
+  h.className = "heart";
+  h.style.left = Math.random() * (window.innerWidth - 30) + "px";
+  document.body.appendChild(h);
+
+  let y = -30;
+  let fall = setInterval(() => {
+    y += 5;
+    h.style.top = y + "px";
+
+    let px = x - 25;
+    let hx = h.offsetLeft;
+
+    if (y > window.innerHeight - 80 && Math.abs(px - hx) < 40) {
+      score++;
+      h.remove();
+      clearInterval(fall);
+    }
+
+    if (y > window.innerHeight) {
+      h.remove();
+      clearInterval(fall);
+    }
+  }, 30);
+}
+
+player.style.left = x + "px";
+
+let gameLoop = setInterval(spawnHeart, 400);
+
+let timer = setInterval(() => {
+  time--;
+  if (time <= 0) {
+    clearInterval(gameLoop);
+    clearInterval(timer);
+    alert("Score: " + score);
+  }
+}, 1000);
+</script>
+
+</body>
+</html>
